@@ -42,8 +42,37 @@
     }
     .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: #FFF; font-weight: 800; font-size: 16px; }
     .brand img { height: 38px; width: auto; mix-blend-mode: screen; }
-    .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 14px; margin-left: 20px; font-weight: 600; }
+    .nav-links { display: flex; align-items: center; gap: 16px; }
+    .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 14px; font-weight: 600; transition: color 0.2s; }
     .nav-links a:hover { color: var(--cyan); }
+
+    .lang-switcher {
+      display: inline-flex;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 3px;
+      gap: 2px;
+      margin-left: 8px;
+    }
+    .lang-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 7px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .lang-btn:hover { color: #FFF; }
+    .lang-btn.active {
+      background: var(--cyan);
+      color: #000;
+      box-shadow: 0 2px 8px rgba(0, 229, 255, 0.35);
+    }
+
     .doc-content { padding: 60px 0; }
     h1 { font-size: 38px; font-weight: 900; margin-bottom: 16px; line-height: 1.2; }
     h2 { font-size: 22px; font-weight: 800; margin: 40px 0 16px; color: var(--cyan); border-bottom: 1px solid var(--border); padding-bottom: 8px; }
@@ -57,6 +86,7 @@
     .callout p { margin: 0; color: #E0F2FE; }
     footer { border-top: 1px solid var(--border); padding: 30px 0; text-align: center; color: var(--text-dim); font-size: 13px; }
     footer a { color: var(--text-muted); text-decoration: none; margin: 0 8px; }
+    footer a:hover { color: var(--cyan); }
   </style>
 </head>
 <body>
@@ -67,38 +97,42 @@
         <img src="/rtb_logo.png" alt="RTB Labs" />
       </a>
       <div class="nav-links">
-        <a href="/huepulse/">HuePulse</a>
-        <a href="/huepulse/testers.html">Testers</a>
-        <a href="/huepulse/privacy.html">Privacy</a>
+        <a href="/huepulse/" data-i18n="nav.huepulse">HuePulse</a>
+        <a href="/huepulse/testers.html" data-i18n="nav.testers">Testers</a>
+        <a href="/huepulse/privacy.html" data-i18n="nav.privacy">Privacy</a>
+        <div class="lang-switcher">
+          <button class="lang-btn" id="btn-pt" onclick="setLanguage('pt')">🇧🇷 PT</button>
+          <button class="lang-btn" id="btn-en" onclick="setLanguage('en')">🇺🇸 EN</button>
+        </div>
       </div>
     </header>
 
     <main class="doc-content">
-      <h1>HuePulse Technical Documentation</h1>
-      <p>HuePulse is a high-performance, sound-reactive lighting system built for Philips Hue smart ecosystems. It captures acoustic audio locally, performs real-time volume/BPM analysis, and blasts binary streaming datagrams to the Hue Bridge via UDP port 2100.</p>
+      <h1 data-i18n="docs.title">HuePulse Technical Documentation</h1>
+      <p data-i18n="docs.lead">HuePulse is a high-performance, sound-reactive lighting system built for Philips Hue smart ecosystems. It captures acoustic audio locally, performs real-time volume/BPM analysis, and blasts binary streaming datagrams to the Hue Bridge via UDP port 2100.</p>
 
       <div class="callout">
-        <p><strong>Zero Cloud Latency:</strong> Audio is sampled and computed entirely in device RAM. No audio packets or voice streams are ever transmitted over the Internet or stored on disk.</p>
+        <p data-i18n="docs.callout"><strong>Zero Cloud Latency:</strong> Audio is sampled and computed entirely in device RAM. No audio packets or voice streams are ever transmitted over the Internet or stored on disk.</p>
       </div>
 
-      <h2>1. Architecture Overview</h2>
-      <p>HuePulse employs a hybrid multi-layer architecture designed for microsecond response times:</p>
-      <ul>
+      <h2 data-i18n="docs.sec1.title">1. Architecture Overview</h2>
+      <p data-i18n="docs.sec1.intro">HuePulse employs a hybrid multi-layer architecture designed for microsecond response times:</p>
+      <ul data-i18n="docs.sec1.list">
         <li><strong>Audio Capture Engine (Dart/Android):</strong> 16-bit PCM streaming at 22,050 Hz via <code>AndroidRecordConfig</code> with <code>unprocessed</code> audio source, preventing audio ducking or interference when music plays on the phone (e.g., Spotify).</li>
         <li><strong>Native UDP DTLS 1.2 PSK (Kotlin/BouncyCastle):</strong> Direct socket connection on port <code>2100</code> using <code>TLS_PSK_WITH_AES_128_GCM_SHA256</code> with <code>ProtocolVersion.DTLSv12.only()</code>.</li>
         <li><strong>CLIP v2 Spatial Resolution:</strong> Automatic query of <code>/clip/v2/resource/entertainment_configuration</code> mapping 3D Cartesian coordinates (X, Y, Z) to entertainment channel IDs.</li>
         <li><strong>Safety Governor (REST Fallback):</strong> In case UDP is disabled or unreachable, a token-bucket throttled coalescing queue dispatches Zigbee broadcasts while enforcing the strict physical 10 req/s threshold on Hue Bridge v2.</li>
       </ul>
 
-      <h2>2. Quick Setup &amp; Network Requirements</h2>
-      <ol>
+      <h2 data-i18n="docs.sec2.title">2. Quick Setup &amp; Network Requirements</h2>
+      <ol data-i18n="docs.sec2.list">
         <li><strong>Create an Entertainment Area:</strong> Open the official <em>Philips Hue</em> app on iOS/Android, go to <em>Settings → Entertainment Areas</em>, and select your room with at least 1 color lamp or lightstrip.</li>
         <li><strong>Same Local Wi-Fi Subnet:</strong> Connect your smartphone to the same Wi-Fi network as your Philips Hue Bridge (2.4 GHz or 5 GHz). Ensure <em>AP Client Isolation</em> is disabled in your router.</li>
         <li><strong>Launch HuePulse:</strong> The app will auto-discover your Bridge via mDNS and Philips N-UPnP. Press the large physical circular button on your Hue Bridge once when prompted to authenticate.</li>
       </ol>
 
-      <h2>3. HueStream Binary Protocol (v2.0)</h2>
-      <p>Streaming datagrams adhere to the Hue Entertainment v2 binary layout:</p>
+      <h2 data-i18n="docs.sec3.title">3. HueStream Binary Protocol (v2.0)</h2>
+      <p data-i18n="docs.sec3.intro">Streaming datagrams adhere to the Hue Entertainment v2 binary layout:</p>
       <pre>
 Header (16 Bytes):
   [0..8]   "HueStream" (ASCII)
@@ -117,8 +151,8 @@ Payload:
            Bytes 5-6: Blue  (16-bit Big-Endian, 0..65535)
       </pre>
 
-      <h2>4. Bridge Hardware Compatibility</h2>
-      <ul>
+      <h2 data-i18n="docs.sec4.title">4. Bridge Hardware Compatibility</h2>
+      <ul data-i18n="docs.sec4.list">
         <li><strong>Philips Hue Bridge v2 (Square White):</strong> Fully supported. Streams up to 20 channels at 25–50 FPS.</li>
         <li><strong>Philips Hue Bridge Pro (2026 Black):</strong> Fully supported. Up to 150+ devices with built-in Wi-Fi and quad-core CPU.</li>
         <li><strong>Gradient Lightstrips:</strong> Multi-zone channels (3 zones on Ambiance, 7 zones on Play) map to the primary channel in v0.9.0-rc1, with independent spatial EQ chasers scheduled for future releases.</li>
@@ -126,9 +160,80 @@ Payload:
     </main>
 
     <footer>
-      <p>&copy; 2026 RTB Tech Labs. <a href="/huepulse/">HuePulse Home</a> | <a href="/huepulse/privacy.html">Privacy</a></p>
+      <p>&copy; 2026 RTB Tech Labs. <a href="/huepulse/" data-i18n="nav.huepulse">HuePulse Home</a> | <a href="/huepulse/privacy.html" data-i18n="nav.privacy">Privacy</a></p>
     </footer>
   </div>
+
+  <script>
+    const translations = {
+      en: {
+        'nav.huepulse': 'HuePulse Home',
+        'nav.testers': 'Testers Guide',
+        'nav.privacy': 'Privacy Policy',
+        'docs.title': 'HuePulse Technical Documentation',
+        'docs.lead': 'HuePulse is a high-performance, sound-reactive lighting system built for Philips Hue smart ecosystems. It captures acoustic audio locally, performs real-time volume/BPM analysis, and blasts binary streaming datagrams to the Hue Bridge via UDP port 2100.',
+        'docs.callout': '<strong>Zero Cloud Latency:</strong> Audio is sampled and computed entirely in device RAM. No audio packets or voice streams are ever transmitted over the Internet or stored on disk.',
+        'docs.sec1.title': '1. Architecture Overview',
+        'docs.sec1.intro': 'HuePulse employs a hybrid multi-layer architecture designed for microsecond response times:',
+        'docs.sec1.list': '<li><strong>Audio Capture Engine (Dart/Android):</strong> 16-bit PCM streaming at 22,050 Hz via <code>AndroidRecordConfig</code> with <code>unprocessed</code> audio source, preventing audio ducking or interference when music plays on the phone (e.g., Spotify).</li><li><strong>Native UDP DTLS 1.2 PSK (Kotlin/BouncyCastle):</strong> Direct socket connection on port <code>2100</code> using <code>TLS_PSK_WITH_AES_128_GCM_SHA256</code> with <code>ProtocolVersion.DTLSv12.only()</code>.</li><li><strong>CLIP v2 Spatial Resolution:</strong> Automatic query of <code>/clip/v2/resource/entertainment_configuration</code> mapping 3D Cartesian coordinates (X, Y, Z) to entertainment channel IDs.</li><li><strong>Safety Governor (REST Fallback):</strong> In case UDP is disabled or unreachable, a token-bucket throttled coalescing queue dispatches Zigbee broadcasts while enforcing the strict physical 10 req/s threshold on Hue Bridge v2.</li>',
+        'docs.sec2.title': '2. Quick Setup &amp; Network Requirements',
+        'docs.sec2.list': '<li><strong>Create an Entertainment Area:</strong> Open the official <em>Philips Hue</em> app on iOS/Android, go to <em>Settings → Entertainment Areas</em>, and select your room with at least 1 color lamp or lightstrip.</li><li><strong>Same Local Wi-Fi Subnet:</strong> Connect your smartphone to the same Wi-Fi network as your Philips Hue Bridge (2.4 GHz or 5 GHz). Ensure <em>AP Client Isolation</em> is disabled in your router.</li><li><strong>Launch HuePulse:</strong> The app will auto-discover your Bridge via mDNS and Philips N-UPnP. Press the large physical circular button on your Hue Bridge once when prompted to authenticate.</li>',
+        'docs.sec3.title': '3. HueStream Binary Protocol (v2.0)',
+        'docs.sec3.intro': 'Streaming datagrams adhere to the Hue Entertainment v2 binary layout:',
+        'docs.sec4.title': '4. Bridge Hardware Compatibility',
+        'docs.sec4.list': '<li><strong>Philips Hue Bridge v2 (Square White):</strong> Fully supported. Streams up to 20 channels at 25–50 FPS.</li><li><strong>Philips Hue Bridge Pro (2026 Black):</strong> Fully supported. Up to 150+ devices with built-in Wi-Fi and quad-core CPU.</li><li><strong>Gradient Lightstrips:</strong> Multi-zone channels (3 zones on Ambiance, 7 zones on Play) map to the primary channel in v0.9.0-rc1, with independent spatial EQ chasers scheduled for future releases.</li>'
+      },
+      pt: {
+        'nav.huepulse': 'Início HuePulse',
+        'nav.testers': 'Guia de Testadores',
+        'nav.privacy': 'Privacidade',
+        'docs.title': 'Documentação Técnica do HuePulse',
+        'docs.lead': 'O HuePulse é uma engine de iluminação de alta performance reativa ao som desenvolvida para o ecossistema Philips Hue. Ele captura áudio localmente, executa análises de volume/BPM em tempo real e dispara datagramas binários contínuos para o Hue Bridge via porta UDP 2100.',
+        'docs.callout': '<strong>Latência Zero de Nuvem:</strong> O áudio é amostrado e processado inteiramente na memória RAM do aparelho. Nenhum pacote de áudio ou gravação de voz é transmitido pela internet ou salvo em disco.',
+        'docs.sec1.title': '1. Visão Geral da Arquitetura',
+        'docs.sec1.intro': 'O HuePulse utiliza uma arquitetura híbrida multicamadas projetada para tempos de resposta na escala de microssegundos:',
+        'docs.sec1.list': '<li><strong>Motor de Captura de Áudio (Dart/Android):</strong> Streaming PCM de 16 bits a 22.050 Hz via <code>AndroidRecordConfig</code> com fonte <code>unprocessed</code>, impedindo abafamento ou ducking quando o usuário toca músicas no próprio celular (ex: Spotify).</li><li><strong>Socket Nativo UDP DTLS 1.2 PSK (Kotlin/BouncyCastle):</strong> Conexão direta na porta <code>2100</code> utilizando a cifra <code>TLS_PSK_WITH_AES_128_GCM_SHA256</code> com <code>ProtocolVersion.DTLSv12.only()</code>.</li><li><strong>Resolução Espacial CLIP v2:</strong> Consulta automática a <code>/clip/v2/resource/entertainment_configuration</code> mapeando coordenadas cartesianas 3D (X, Y, Z) para os IDs de canais de entretenimento.</li><li><strong>Governador de Segurança (Fallback REST):</strong> Se o UDP estiver indisponível, uma fila coalescente com token-bucket despacha transmissões Zigbee respeitando rigorosamente o teto físico de 10 req/s do Bridge v2.</li>',
+        'docs.sec2.title': '2. Configuração Rápida &amp; Requisitos de Rede',
+        'docs.sec2.list': '<li><strong>Criar Área de Entretenimento:</strong> Abra o aplicativo oficial <em>Philips Hue</em> no smartphone, vá em <em>Configurações → Áreas de Entretenimento</em> e selecione seu cômodo com pelo menos 1 lâmpada colorida ou fita LED.</li><li><strong>Mesma Sub-rede Wi-Fi Local:</strong> Conecte seu celular à mesma rede Wi-Fi do seu Philips Hue Bridge (2.4 GHz ou 5 GHz). Certifique-se de que a opção <em>Isolamento de Ponto de Acesso (AP Isolation)</em> está desativada no seu roteador.</li><li><strong>Iniciar o HuePulse:</strong> O app descobrirá o Bridge automaticamente via mDNS e N-UPnP. Pressione o botão físico circular do seu Hue Bridge quando solicitado para autenticar.</li>',
+        'docs.sec3.title': '3. Protocolo Binário HueStream (v2.0)',
+        'docs.sec3.intro': 'Os datagramas de streaming seguem a estrutura binária da especificação Hue Entertainment v2:',
+        'docs.sec4.title': '4. Compatibilidade de Hardware',
+        'docs.sec4.list': '<li><strong>Philips Hue Bridge v2 (Branco Quadrado):</strong> Suporte completo. Transmite até 20 canais de 25 a 50 FPS contínuos.</li><li><strong>Philips Hue Bridge Pro (2026 Preto):</strong> Suporte completo. Mais de 150 dispositivos com Wi-Fi embutido e processador quad-core.</li><li><strong>Fitas LED Gradient:</strong> Os múltiplos canais (3 zonas na Ambiance, 7 zonas na Play) mapeiam para o canal primário no v0.9.0-rc1, com efeitos de equalização espacial sequencial planejados para versões futuras.</li>'
+      }
+    };
+
+    function setLanguage(lang) {
+      localStorage.setItem('rtb_lang', lang);
+      localStorage.setItem('huepulse_lang', lang);
+      document.documentElement.lang = lang === 'pt' ? 'pt-BR' : 'en-US';
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[lang] && translations[lang][key]) {
+          el.innerHTML = translations[lang][key];
+        }
+      });
+
+      document.getElementById('btn-pt').classList.toggle('active', lang === 'pt');
+      document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    }
+
+    function initLanguage() {
+      const saved = localStorage.getItem('rtb_lang') || localStorage.getItem('huepulse_lang');
+      if (saved && (saved === 'pt' || saved === 'en')) {
+        setLanguage(saved);
+        return;
+      }
+      const browserLang = (navigator.language || navigator.userLanguage || '').toLowerCase();
+      if (browserLang.startsWith('pt')) {
+        setLanguage('pt');
+      } else {
+        setLanguage('en');
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', initLanguage);
+  </script>
 
 </body>
 </html>

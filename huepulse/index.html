@@ -857,8 +857,13 @@
             <button class="lang-btn" id="btn-en" onclick="setLanguage('en')">🇺🇸 EN</button>
           </div>
 
-          <a href="#privacy" class="btn-github">
-            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+          <a href="/huepulse/docs.html" class="btn-github" style="margin-left: 10px;">
+            <span data-i18n="nav.docs">Docs</span>
+          </a>
+          <a href="/huepulse/testers.html" class="btn-github" style="margin-left: 6px;">
+            <span data-i18n="nav.testers">Testers</span>
+          </a>
+          <a href="/huepulse/privacy.html" class="btn-github" style="margin-left: 6px;">
             <span data-i18n="nav.privacy">Privacidade</span>
           </a>
         </div>
@@ -1248,6 +1253,8 @@
   <script>
     const translations = {
       pt: {
+        'nav.docs': 'Documentação',
+        'nav.testers': 'Testadores',
         'nav.privacy': 'Privacidade',
         'hero.pill': 'Hue Entertainment API • Latência Ultra-Baixa (<40ms)',
         'hero.title': 'Sinta a sua música através da <span class="gradient-text">luz em tempo real</span>.',
@@ -1317,6 +1324,8 @@
         'footer.privacy': 'Privacidade'
       },
       en: {
+        'nav.docs': 'Documentation',
+        'nav.testers': 'Testers',
         'nav.privacy': 'Privacy',
         'hero.pill': 'Hue Entertainment API • Ultra-Low Latency (<40ms)',
         'hero.title': 'Feel your music through <span class="gradient-text">light in real time</span>.',
@@ -1388,6 +1397,7 @@
     };
 
     function setLanguage(lang) {
+      localStorage.setItem('rtb_lang', lang);
       localStorage.setItem('huepulse_lang', lang);
       document.documentElement.lang = lang === 'pt' ? 'pt-BR' : 'en-US';
 
@@ -1403,7 +1413,7 @@
     }
 
     function initLanguage() {
-      const saved = localStorage.getItem('huepulse_lang');
+      const saved = localStorage.getItem('rtb_lang') || localStorage.getItem('huepulse_lang');
       if (saved && (saved === 'pt' || saved === 'en')) {
         setLanguage(saved);
         return;

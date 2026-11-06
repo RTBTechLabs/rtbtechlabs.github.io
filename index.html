@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RTB Tech Labs — High Performance Software &amp; IoT Research</title>
-  <meta name="description" content="RTB Tech Labs is an engineering and technology studio building ultra-low latency mobile experiences, IoT integrations, and real-time audio systems." />
-  <meta name="keywords" content="RTB Tech Labs, IoT, Mobile Software, Flutter, Real-Time Audio, Smart Lighting, Hardware Integration" />
-  <meta property="og:title" content="RTB Tech Labs — Software &amp; Hardware Innovation" />
+  <title>RTB Tech Labs • Hardware &amp; Software Research</title>
+  <meta name="description" content="RTB Tech Labs specializes in real-time mobile software, acoustic DSP algorithms, and ultra-low latency IoT ecosystems." />
+  <meta name="keywords" content="RTB Tech Labs, HuePulse, IoT, Philips Hue, Flutter, DSP Audio, Android" />
+
+  <meta property="og:title" content="RTB Tech Labs • Hardware &amp; Software Research" />
   <meta property="og:description" content="Engineering real-time, low-latency mobile and IoT applications." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://rtbtechlabs.com/" />
@@ -49,7 +50,7 @@
 
     /* HEADER */
     header {
-      padding: 24px 0;
+      padding: 20px 0;
       border-bottom: 1px solid var(--border);
       position: sticky;
       top: 0;
@@ -76,7 +77,7 @@
     }
     .nav-links {
       display: flex;
-      gap: 24px;
+      gap: 20px;
       align-items: center;
     }
     .nav-links a {
@@ -87,6 +88,36 @@
       transition: color 0.2s;
     }
     .nav-links a:hover { color: var(--cyan); }
+    
+    .lang-switcher {
+      display: inline-flex;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 3px;
+      gap: 2px;
+      margin-left: 8px;
+    }
+    .lang-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 5px 10px;
+      border-radius: 7px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .lang-btn:hover {
+      color: #FFF;
+    }
+    .lang-btn.active {
+      background: var(--cyan);
+      color: #000;
+      box-shadow: 0 2px 8px rgba(0, 229, 255, 0.35);
+    }
+
     .btn-contact {
       background: rgba(0, 229, 255, 0.1);
       color: var(--cyan) !important;
@@ -96,40 +127,53 @@
       transition: all 0.2s;
     }
     .btn-contact:hover {
-      background: var(--cyan);
-      color: #000 !important;
+      background: rgba(0, 229, 255, 0.2);
+      border-color: var(--cyan);
     }
 
     /* HERO */
     .hero {
-      padding: 90px 0 60px;
+      padding: 100px 0 80px;
       text-align: center;
       position: relative;
     }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(0, 229, 255, 0.12) 0%, rgba(37, 99, 235, 0.08) 50%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
     .badge-hero {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 16px;
-      border-radius: 999px;
+      display: inline-block;
       background: rgba(0, 229, 255, 0.08);
       border: 1px solid rgba(0, 229, 255, 0.25);
+      color: var(--cyan);
       font-size: 12px;
       font-weight: 700;
-      color: var(--cyan);
-      letter-spacing: 1px;
       text-transform: uppercase;
+      letter-spacing: 1.5px;
+      padding: 6px 16px;
+      border-radius: 999px;
       margin-bottom: 24px;
     }
     .hero h1 {
-      font-size: clamp(38px, 6vw, 68px);
+      font-size: clamp(36px, 5vw, 64px);
       font-weight: 900;
       letter-spacing: -1.5px;
-      line-height: 1.1;
-      margin-bottom: 20px;
+      line-height: 1.15;
+      margin-bottom: 24px;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
     }
     .gradient-text {
-      background: linear-gradient(135deg, #FFF 30%, var(--cyan) 80%, var(--blue) 100%);
+      background: linear-gradient(135deg, #FFF 30%, var(--cyan) 70%, var(--blue) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -204,14 +248,22 @@
       border-radius: 12px;
     }
     .metric-val {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 18px;
-      font-weight: 700;
+      font-size: 20px;
+      font-weight: 900;
       color: var(--cyan);
+      font-family: 'JetBrains Mono', monospace;
     }
     .metric-lbl {
       font-size: 11px;
       color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 2px;
+    }
+    .card-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
     }
     .btn-primary {
       display: inline-flex;
@@ -229,6 +281,23 @@
     .btn-primary:hover {
       transform: translateY(-2px);
       box-shadow: 0 10px 25px rgba(0, 229, 255, 0.35);
+    }
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      color: #FFF;
+      font-weight: 700;
+      font-size: 14px;
+      padding: 14px 24px;
+      border-radius: 12px;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
     }
     .product-preview {
       text-align: center;
@@ -294,6 +363,9 @@
         grid-template-columns: 1fr;
         padding: 24px;
       }
+      .nav-links a:not(.btn-contact) {
+        display: none;
+      }
     }
   </style>
 </head>
@@ -306,10 +378,14 @@
         <img src="/rtb_logo.png" alt="RTB Labs" />
       </a>
       <div class="nav-links">
-        <a href="/huepulse/">HuePulse</a>
-        <a href="/huepulse/docs.html">Docs</a>
-        <a href="/huepulse/testers.html">Testers</a>
-        <a href="mailto:rtbtechlabs@gmail.com" class="btn-contact">Contact</a>
+        <a href="/huepulse/" data-i18n="nav.huepulse">HuePulse</a>
+        <a href="/huepulse/docs.html" data-i18n="nav.docs">Docs</a>
+        <a href="/huepulse/testers.html" data-i18n="nav.testers">Testers</a>
+        <a href="mailto:rtbtechlabs@gmail.com" class="btn-contact" data-i18n="nav.contact">Contact</a>
+        <div class="lang-switcher">
+          <button class="lang-btn" id="btn-pt" onclick="setLanguage('pt')">🇧🇷 PT</button>
+          <button class="lang-btn" id="btn-en" onclick="setLanguage('en')">🇺🇸 EN</button>
+        </div>
       </div>
     </div>
   </header>
@@ -317,42 +393,46 @@
   <!-- HERO -->
   <section class="hero">
     <div class="container">
-      <div class="badge-hero">⚡ Hardware &amp; Software Research Lab</div>
-      <h1>Building <span class="gradient-text">Real-Time Mobile</span> &amp; IoT Experiences</h1>
-      <p>RTB Tech Labs engineers high-performance mobile software, DSP audio algorithms, and ultra-low latency smart hardware ecosystems.</p>
+      <div class="badge-hero" data-i18n="hero.badge">⚡ Hardware &amp; Software Research Lab</div>
+      <h1 data-i18n="hero.title">Building <span class="gradient-text">Real-Time Mobile</span> &amp; IoT Experiences</h1>
+      <p data-i18n="hero.subtitle">RTB Tech Labs engineers high-performance mobile software, DSP audio algorithms, and ultra-low latency smart hardware ecosystems.</p>
     </div>
   </section>
 
   <!-- FLAGSHIP PRODUCT -->
   <section class="container" style="padding-bottom: 40px;">
-    <div class="section-title">Flagship Product</div>
-    <div class="section-heading">Featured Innovation</div>
+    <div class="section-title" data-i18n="product.flagship">Flagship Product</div>
+    <div class="section-heading" data-i18n="product.featured">Featured Innovation</div>
 
     <div class="product-card">
       <div class="product-info">
-        <span class="product-badge">Mobile App • v0.9.0-rc1</span>
+        <span class="product-badge" data-i18n="product.badge">Sound-to-Light Engine</span>
         <h3>HuePulse</h3>
-        <p>Sound reactive lighting engine for Philips Hue. Processes live environmental acoustic audio locally on-device and streams binary datagrams over Hue Entertainment API (UDP port 2100 DTLS 1.2 PSK) with zero cloud latency.</p>
-        
+        <p data-i18n="product.description">
+          Sound-reactive lighting engine for Philips Hue. Features sub-40ms UDP DTLS 1.2 streaming, real-time audio FFT DSP, and hardware-accelerated rhythm pulse synchronization directly from your Android device.
+        </p>
         <div class="product-metrics">
           <div class="metric">
-            <div class="metric-val">&lt; 10ms</div>
-            <div class="metric-lbl">Network Latency</div>
+            <div class="metric-val">&lt; 40ms</div>
+            <div class="metric-lbl" data-i18n="product.metric1">UDP Latency</div>
           </div>
           <div class="metric">
-            <div class="metric-val">50 FPS</div>
-            <div class="metric-lbl">Datagram Stream</div>
+            <div class="metric-val">25-50 FPS</div>
+            <div class="metric-lbl" data-i18n="product.metric2">Light Stream</div>
           </div>
           <div class="metric">
-            <div class="metric-val">100%</div>
-            <div class="metric-lbl">Local Privacy</div>
+            <div class="metric-val">100% Local</div>
+            <div class="metric-lbl" data-i18n="product.metric3">Zero Telemetry</div>
           </div>
         </div>
-
-        <a href="/huepulse/" class="btn-primary">
-          <span>Explore HuePulse</span>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
+        <div class="card-actions">
+          <a href="/huepulse/" class="btn-primary" data-i18n="product.ctaExplore">
+            Explore HuePulse <span>&rarr;</span>
+          </a>
+          <a href="/huepulse/testers.html" class="btn-secondary" data-i18n="product.ctaTesters">
+            Join Closed Beta
+          </a>
+        </div>
       </div>
       <div class="product-preview">
         <img src="/HuePulseIcon_PlayStore_512.png" alt="HuePulse Icon" />
@@ -361,27 +441,25 @@
   </section>
 
   <!-- CORE CAPABILITIES -->
-  <section class="capabilities">
-    <div class="container">
-      <div class="section-title">Engineering Focus</div>
-      <div class="section-heading">What We Do</div>
+  <section class="capabilities container">
+    <div class="section-title" data-i18n="caps.title">Core Capabilities</div>
+    <div class="section-heading" data-i18n="caps.heading">Engineered for Extreme Real-Time Demands</div>
 
-      <div class="grid-3">
-        <div class="feature-box">
-          <div class="feature-icon">⚡</div>
-          <h4>Zero-Latency Protocols</h4>
-          <p>Native implementation of DTLS 1.2 PSK, raw UDP datagrams, and binary packet serialization for immediate hardware feedback.</p>
-        </div>
-        <div class="feature-box">
-          <div class="feature-icon">🎵</div>
-          <h4>On-Device Audio DSP</h4>
-          <p>Real-time RMS volume computation, transient peak gating, and tempo beat detection (IBI) running locally without cloud telemetry.</p>
-        </div>
-        <div class="feature-box">
-          <div class="feature-icon">📱</div>
-          <h4>Modern Cross-Platform</h4>
-          <p>Flutter architecture coupled with native Android Kotlin services, foreground task daemons, and Impeller Vulkan hardware rendering.</p>
-        </div>
+    <div class="grid-3">
+      <div class="feature-box">
+        <div class="feature-icon">⚡</div>
+        <h4 data-i18n="caps.box1.title">UDP DTLS 1.2 Streaming</h4>
+        <p data-i18n="caps.box1.desc">Native low-overhead encrypted datagram protocol sending binary light frames directly over local LAN at up to 50 frames per second.</p>
+      </div>
+      <div class="feature-box">
+        <div class="feature-icon">🎵</div>
+        <h4 data-i18n="caps.box2.title">On-Device Audio DSP</h4>
+        <p data-i18n="caps.box2.desc">Real-time RMS volume computation, transient peak gating, and tempo beat detection (IBI) running locally without cloud telemetry.</p>
+      </div>
+      <div class="feature-box">
+        <div class="feature-icon">📱</div>
+        <h4 data-i18n="caps.box3.title">Modern Cross-Platform</h4>
+        <p data-i18n="caps.box3.desc">Flutter architecture coupled with native Android Kotlin services, foreground task daemons, and Impeller Vulkan hardware rendering.</p>
       </div>
     </div>
   </section>
@@ -389,16 +467,109 @@
   <!-- FOOTER -->
   <footer>
     <div class="container">
-      <p>&copy; 2026 RTB Tech Labs. All rights reserved.</p>
+      <p data-i18n="footer.rights">&copy; 2026 RTB Tech Labs. All rights reserved.</p>
       <div style="margin-top: 10px;">
-        <a href="/huepulse/">HuePulse</a>
-        <a href="/huepulse/docs.html">Documentation</a>
-        <a href="/huepulse/testers.html">Tester Guide</a>
-        <a href="/huepulse/privacy.html">Privacy Policy</a>
-        <a href="mailto:rtbtechlabs@gmail.com">Contact</a>
+        <a href="/huepulse/" data-i18n="nav.huepulse">HuePulse</a>
+        <a href="/huepulse/docs.html" data-i18n="nav.docs">Documentation</a>
+        <a href="/huepulse/testers.html" data-i18n="nav.testers">Tester Guide</a>
+        <a href="/huepulse/privacy.html" data-i18n="footer.privacy">Privacy Policy</a>
+        <a href="mailto:rtbtechlabs@gmail.com" data-i18n="nav.contact">Contact</a>
       </div>
     </div>
   </footer>
+
+  <script>
+    const translations = {
+      en: {
+        'nav.huepulse': 'HuePulse',
+        'nav.docs': 'Docs',
+        'nav.testers': 'Testers',
+        'nav.contact': 'Contact',
+        'hero.badge': '⚡ Hardware &amp; Software Research Lab',
+        'hero.title': 'Building <span class="gradient-text">Real-Time Mobile</span> &amp; IoT Experiences',
+        'hero.subtitle': 'RTB Tech Labs engineers high-performance mobile software, DSP audio algorithms, and ultra-low latency smart hardware ecosystems.',
+        'product.flagship': 'Flagship Product',
+        'product.featured': 'Featured Innovation',
+        'product.badge': 'Sound-to-Light Engine',
+        'product.description': 'Sound-reactive lighting engine for Philips Hue. Features sub-40ms UDP DTLS 1.2 streaming, real-time audio FFT DSP, and hardware-accelerated rhythm pulse synchronization directly from your Android device.',
+        'product.metric1': 'UDP Latency',
+        'product.metric2': 'Light Stream',
+        'product.metric3': 'Zero Telemetry',
+        'product.ctaExplore': 'Explore HuePulse <span>&rarr;</span>',
+        'product.ctaTesters': 'Join Closed Beta',
+        'caps.title': 'Core Capabilities',
+        'caps.heading': 'Engineered for Extreme Real-Time Demands',
+        'caps.box1.title': 'UDP DTLS 1.2 Streaming',
+        'caps.box1.desc': 'Native low-overhead encrypted datagram protocol sending binary light frames directly over local LAN at up to 50 frames per second.',
+        'caps.box2.title': 'On-Device Audio DSP',
+        'caps.box2.desc': 'Real-time RMS volume computation, transient peak gating, and tempo beat detection (IBI) running locally without cloud telemetry.',
+        'caps.box3.title': 'Modern Cross-Platform',
+        'caps.box3.desc': 'Flutter architecture coupled with native Android Kotlin services, foreground task daemons, and Impeller Vulkan hardware rendering.',
+        'footer.rights': '&copy; 2026 RTB Tech Labs. All rights reserved.',
+        'footer.privacy': 'Privacy Policy'
+      },
+      pt: {
+        'nav.huepulse': 'HuePulse',
+        'nav.docs': 'Documentação',
+        'nav.testers': 'Testadores',
+        'nav.contact': 'Contato',
+        'hero.badge': '⚡ Laboratório de Hardware &amp; Software',
+        'hero.title': 'Criando Experiências <span class="gradient-text">Mobile &amp; IoT</span> em Tempo Real',
+        'hero.subtitle': 'A RTB Tech Labs desenvolve software móvel de alta performance, algoritmos DSP de áudio e ecossistemas inteligentes com latência ultra-baixa.',
+        'product.flagship': 'Produto Principal',
+        'product.featured': 'Inovação em Destaque',
+        'product.badge': 'Sincronizador Som-e-Luz',
+        'product.description': 'Engine de iluminação reativa ao som para Philips Hue. Transmissão UDP DTLS 1.2 em menos de 40ms, processamento DSP de áudio em tempo real e sincronização rítmica acelerada por hardware direto do seu smartphone Android.',
+        'product.metric1': 'Latência UDP',
+        'product.metric2': 'Transmissão',
+        'product.metric3': 'Zero Telemetria',
+        'product.ctaExplore': 'Conhecer o HuePulse <span>&rarr;</span>',
+        'product.ctaTesters': 'Entrar no Beta Fechado',
+        'caps.title': 'Competências Centrais',
+        'caps.heading': 'Engenharia para Demandas de Tempo Real Extremo',
+        'caps.box1.title': 'Streaming UDP DTLS 1.2',
+        'caps.box1.desc': 'Protocolo nativo de datagramas criptografados enviando quadros binários de iluminação via rede local (LAN) a até 50 quadros por segundo.',
+        'caps.box2.title': 'DSP de Áudio no Dispositivo',
+        'caps.box2.desc': 'Cálculo de volume RMS em tempo real, gating de transientes e detecção de batidas (IBI) rodando localmente sem qualquer envio para a nuvem.',
+        'caps.box3.title': 'Cross-Platform Moderno',
+        'caps.box3.desc': 'Arquitetura Flutter acoplada a serviços nativos Kotlin no Android, daemons em primeiro plano e renderização gráfica via Vulkan Impeller.',
+        'footer.rights': '&copy; 2026 RTB Tech Labs. Todos os direitos reservados.',
+        'footer.privacy': 'Política de Privacidade'
+      }
+    };
+
+    function setLanguage(lang) {
+      localStorage.setItem('rtb_lang', lang);
+      localStorage.setItem('huepulse_lang', lang);
+      document.documentElement.lang = lang === 'pt' ? 'pt-BR' : 'en-US';
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[lang] && translations[lang][key]) {
+          el.innerHTML = translations[lang][key];
+        }
+      });
+
+      document.getElementById('btn-pt').classList.toggle('active', lang === 'pt');
+      document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    }
+
+    function initLanguage() {
+      const saved = localStorage.getItem('rtb_lang') || localStorage.getItem('huepulse_lang');
+      if (saved && (saved === 'pt' || saved === 'en')) {
+        setLanguage(saved);
+        return;
+      }
+      const browserLang = (navigator.language || navigator.userLanguage || '').toLowerCase();
+      if (browserLang.startsWith('pt')) {
+        setLanguage('pt');
+      } else {
+        setLanguage('en');
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', initLanguage);
+  </script>
 
 </body>
 </html>
