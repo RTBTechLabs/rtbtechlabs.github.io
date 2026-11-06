@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HuePulse Documentation — Setup &amp; Architecture</title>
+  <meta name="description" content="Technical documentation and setup guide for HuePulse - Sound Reactive Lights for Philips Hue." />
+  <meta name="theme-color" content="#07090E" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #07090E;
+      --bg-surface: #0B0F19;
+      --bg-card: #0F1424;
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #F8FAFC;
+      --text-muted: #94A3B8;
+      --text-dim: #64748B;
+      --cyan: #00E5FF;
+      --purple: #9333EA;
+      --blue: #2563EB;
+      --radius: 16px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      line-height: 1.7;
+    }
+    .container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+    header {
+      padding: 24px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: #FFF; font-weight: 800; font-size: 16px; }
+    .brand img { height: 28px; }
+    .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 14px; margin-left: 20px; font-weight: 600; }
+    .nav-links a:hover { color: var(--cyan); }
+    .doc-content { padding: 60px 0; }
+    h1 { font-size: 38px; font-weight: 900; margin-bottom: 16px; line-height: 1.2; }
+    h2 { font-size: 22px; font-weight: 800; margin: 40px 0 16px; color: var(--cyan); border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+    h3 { font-size: 17px; font-weight: 700; margin: 24px 0 10px; }
+    p, li { color: var(--text-muted); font-size: 15px; margin-bottom: 16px; }
+    ul, ol { padding-left: 24px; margin-bottom: 24px; }
+    li { margin-bottom: 8px; }
+    code { font-family: 'JetBrains Mono', monospace; background: var(--bg-surface); padding: 3px 8px; border-radius: 6px; font-size: 13px; color: var(--cyan); }
+    pre { background: var(--bg-surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; overflow-x: auto; margin-bottom: 24px; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #A5F3FC; }
+    .callout { background: rgba(0, 229, 255, 0.06); border-left: 4px solid var(--cyan); padding: 18px; border-radius: 0 12px 12px 0; margin-bottom: 24px; }
+    .callout p { margin: 0; color: #E0F2FE; }
+    footer { border-top: 1px solid var(--border); padding: 30px 0; text-align: center; color: var(--text-dim); font-size: 13px; }
+    footer a { color: var(--text-muted); text-decoration: none; margin: 0 8px; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <a href="/" class="brand">
+        <img src="/rtb_tech_labs_logo.svg" alt="RTB Tech Labs" />
+      </a>
+      <div class="nav-links">
+        <a href="/huepulse/">HuePulse</a>
+        <a href="/huepulse/testers.html">Testers</a>
+        <a href="/huepulse/privacy.html">Privacy</a>
+      </div>
+    </header>
+
+    <main class="doc-content">
+      <h1>HuePulse Technical Documentation</h1>
+      <p>HuePulse is a high-performance, sound-reactive lighting system built for Philips Hue smart ecosystems. It captures acoustic audio locally, performs real-time volume/BPM analysis, and blasts binary streaming datagrams to the Hue Bridge via UDP port 2100.</p>
+
+      <div class="callout">
+        <p><strong>Zero Cloud Latency:</strong> Audio is sampled and computed entirely in device RAM. No audio packets or voice streams are ever transmitted over the Internet or stored on disk.</p>
+      </div>
+
+      <h2>1. Architecture Overview</h2>
+      <p>HuePulse employs a hybrid multi-layer architecture designed for microsecond response times:</p>
+      <ul>
+        <li><strong>Audio Capture Engine (Dart/Android):</strong> 16-bit PCM streaming at 22,050 Hz via <code>AndroidRecordConfig</code> with <code>unprocessed</code> audio source, preventing audio ducking or interference when music plays on the phone (e.g., Spotify).</li>
+        <li><strong>Native UDP DTLS 1.2 PSK (Kotlin/BouncyCastle):</strong> Direct socket connection on port <code>2100</code> using <code>TLS_PSK_WITH_AES_128_GCM_SHA256</code> with <code>ProtocolVersion.DTLSv12.only()</code>.</li>
+        <li><strong>CLIP v2 Spatial Resolution:</strong> Automatic query of <code>/clip/v2/resource/entertainment_configuration</code> mapping 3D Cartesian coordinates (X, Y, Z) to entertainment channel IDs.</li>
+        <li><strong>Safety Governor (REST Fallback):</strong> In case UDP is disabled or unreachable, a token-bucket throttled coalescing queue dispatches Zigbee broadcasts while enforcing the strict physical 10 req/s threshold on Hue Bridge v2.</li>
+      </ul>
+
+      <h2>2. Quick Setup &amp; Network Requirements</h2>
+      <ol>
+        <li><strong>Create an Entertainment Area:</strong> Open the official <em>Philips Hue</em> app on iOS/Android, go to <em>Settings → Entertainment Areas</em>, and select your room with at least 1 color lamp or lightstrip.</li>
+        <li><strong>Same Local Wi-Fi Subnet:</strong> Connect your smartphone to the same Wi-Fi network as your Philips Hue Bridge (2.4 GHz or 5 GHz). Ensure <em>AP Client Isolation</em> is disabled in your router.</li>
+        <li><strong>Launch HuePulse:</strong> The app will auto-discover your Bridge via mDNS and Philips N-UPnP. Press the large physical circular button on your Hue Bridge once when prompted to authenticate.</li>
+      </ol>
+
+      <h2>3. HueStream Binary Protocol (v2.0)</h2>
+      <p>Streaming datagrams adhere to the Hue Entertainment v2 binary layout:</p>
+      <pre>
+Header (16 Bytes):
+  [0..8]   "HueStream" (ASCII)
+  [9..10]  0x02, 0x00 (Protocol Version 2.0)
+  [11]     0x00 (Sequence Counter)
+  [12..13] 0x00, 0x00 (Reserved)
+  [14]     0x00 (Color Space: RGB 16-bit)
+  [15]     0x00 (Reserved)
+
+Payload:
+  [16..51] Entertainment Area UUID (36 Bytes ASCII)
+  [52..N]  Repeated 7-Byte Channel Blocks:
+           Byte 0: Channel ID (0..19)
+           Bytes 1-2: Red   (16-bit Big-Endian, 0..65535)
+           Bytes 3-4: Green (16-bit Big-Endian, 0..65535)
+           Bytes 5-6: Blue  (16-bit Big-Endian, 0..65535)
+      </pre>
+
+      <h2>4. Bridge Hardware Compatibility</h2>
+      <ul>
+        <li><strong>Philips Hue Bridge v2 (Square White):</strong> Fully supported. Streams up to 20 channels at 25–50 FPS.</li>
+        <li><strong>Philips Hue Bridge Pro (2026 Black):</strong> Fully supported. Up to 150+ devices with built-in Wi-Fi and quad-core CPU.</li>
+        <li><strong>Gradient Lightstrips:</strong> Multi-zone channels (3 zones on Ambiance, 7 zones on Play) map to the primary channel in v0.9.0-rc1, with independent spatial EQ chasers scheduled for future releases.</li>
+      </ul>
+    </main>
+
+    <footer>
+      <p>&copy; 2026 RTB Tech Labs. <a href="/huepulse/">HuePulse Home</a> | <a href="/huepulse/privacy.html">Privacy</a></p>
+    </footer>
+  </div>
+
+</body>
+</html>
